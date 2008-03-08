@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="layout" content="main" />
+        <meta name="layout" content="default" />
         <title><g:message code="pregunta.create" default="Create Pregunta" /></title>
 
 		<g:javascript library="prototype" />
