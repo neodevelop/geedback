@@ -56,48 +56,67 @@ class EvalController {
 				
 				flow.idPreguntaActual = preguntaActual.id
 				flow.cuestionario = cuestionario
-				println "escogeCuestionario idPreguntaActual: " +  flow.idPreguntaActual
-				println flow.evaluacion
+				
+				def respuestas = [:]
+				flow.respuestas = respuestas
 				
 			}.to "buscaPregunta"
 		}
 		buscaPregunta {
 			action {
-				println "Buscando pregunta"
 				if(!flow.idPreguntaActual) {
 					return finaliza()
 				}
 				flow.pregunta = Pregunta.get(flow.idPreguntaActual)
 				
-				println flow.pregunta
 				[opciones:OpcionRespuesta.findAllByPregunta(flow.pregunta)]
 		   }
 		   on("success").to "despliegaPregunta"
-			on("finaliza").to "finaliza"
+			on("finaliza").to "guarda"
 		}
 		despliegaPregunta {
 			on("siguiente") {
-				println "DespliegaPregunta Submit"
 				
 				if (!params.respuesta) return error()
 				
 				if(!flow.pregunta.abierta) {
 					def opcionRespuesta = OpcionRespuesta.get(params.respuesta)
+					flow.respuestas.put(flow.idPreguntaActual, opcionRespuesta.id)
 				} else {
-					
+					flow.respuestas.put(flow.idPreguntaActual, params.respuesta)
 				}
 				
 				def pregActual = Pregunta.findByCuestionarioAndIdGreaterThan(flow.cuestionario, flow.idPreguntaActual, [sort:"orden"])
 				
-				println pregActual
+				
 				if(pregActual) {
 					flow.idPreguntaActual = pregActual.id
 				} else {
 					flow.idPreguntaActual = null
 				}
-				
 			}.to "buscaPregunta"
-			on("return").to "finaliza"
+			on("return").to "guarda"
+		}
+		guarda {
+			action {
+				println "Guardando resultados."
+				
+				def q= new StringBuffer()
+				flow.respuestas.each { k, v->
+					def p = Pregunta.get(k)
+					def oR = null
+					println p
+					
+					if(p.abierta) {
+						println v
+					} else {
+						oR = OpcionRespuesta.get(v)
+						println oR
+					}
+				}
+				println q.toString()
+		   }
+		   on("success").to "finaliza"
 		}
 		finaliza()
 	}
