@@ -88,7 +88,6 @@ class EvalController {
 				
 				def pregActual = Pregunta.findByCuestionarioAndIdGreaterThan(flow.cuestionario, flow.idPreguntaActual, [sort:"orden"])
 				
-				
 				if(pregActual) {
 					flow.idPreguntaActual = pregActual.id
 				} else {
@@ -102,18 +101,45 @@ class EvalController {
 				println "Guardando resultados."
 				
 				def q= new StringBuffer()
+				
+				def eva = flow.evaluacion
+				eva.cuestionario = flow.cuestionario
+				eva.save(flush:true)
+				println eva
+				
+				def resp = new ArrayList()
 				flow.respuestas.each { k, v->
+					println "Iterando: " + k
 					def p = Pregunta.get(k)
-					def oR = null
-					println p
+					def oR = new OpcionRespuesta()
+					
+					def respuestaEvaluacion = new RespuestaEvaluacion()
+					respuestaEvaluacion.evaluacion = eva
+					respuestaEvaluacion.pregunta = p
+					
+					println respuestaEvaluacion.evaluacion
 					
 					if(p.abierta) {
-						println v
+						respuestaEvaluacion.respuestaAbierta = v
 					} else {
 						oR = OpcionRespuesta.get(v)
-						println oR
+						respuestaEvaluacion.opcionRespuesta = oR
 					}
+					resp.add(respuestaEvaluacion)
+					println respuestaEvaluacion
+					//println respuestaEvaluacion
+					//respuestaEvaluacion.save(flush:true)
+					//eva.addToRespuestas(respuestaEvaluacion)
 				}
+				
+				resp.each {
+					println "Item: $it"
+					eva.addToRespuestas(it)
+				}
+				
+				println eva
+				println eva.respuestas
+				eva.save(flush:true)
 				println q.toString()
 		   }
 		   on("success").to "finaliza"

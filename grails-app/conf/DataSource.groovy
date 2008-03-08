@@ -31,7 +31,9 @@ environments {
 	production {
 		dataSource {
 			dbCreate = "update"
-			url = "jdbc:hsqldb:file:prodDb;shutdown=true"
+			url = "jdbc:mysql://localhost:3306/geedback"
+			username = "usrgeedback"
+			password = "elusrpwd"
 		}
 	}
 }
