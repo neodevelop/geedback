@@ -1,20 +1,25 @@
 dataSource {
 	pooled = false
-	driverClassName = "org.hsqldb.jdbcDriver"
-	username = "sa"
+	driverClassName = "com.mysql.jdbc.Driver"
+	dialect = org.hibernate.dialect.MySQLInnoDBDialect
+	username = "root"
 	password = ""
 }
 hibernate {
     cache.use_second_level_cache=true
     cache.use_query_cache=true
     cache.provider_class='org.hibernate.cache.EhCacheProvider'
+	//show_sql = true
+	format_sql = true
 }
 // environment specific settings
 environments {
 	development {
 		dataSource {
-			dbCreate = "create-drop" // one of 'create', 'create-drop','update'
-			url = "jdbc:hsqldb:mem:devDB"
+			dbCreate = "update" // one of 'create', 'create-drop','update'
+			url = "jdbc:mysql://localhost:3306/geedbackDev"
+			username = "root"
+			password = ""
 		}
 	}
 	test {
