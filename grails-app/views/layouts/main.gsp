@@ -9,7 +9,7 @@
     <body>
 		<div class="container">
 			<div class="top">
-				<a href="http://code.google.com/p/geedback/" target="_blank"><span>SynergyJ-geedback</span></a>
+				<a href="${createLinkTo(dir:'')}">SynergyJ-geedback</a>
 			</div>
 
 			<div class="header"></div>
@@ -27,6 +27,10 @@
 					<li><a href="http://www.synergyj.com/web.html" target="_blank">Desarrollo Web</a></li>
 					<li><a href="http://www.synergyj.com/hibernate.html" target="_blank">Hibernate</a></li>
 					<li><a href="http://www.synergyj.com/spring.html" target="_blank">Spring</a></li>
+				</ul>
+				<h1>Conoce geedback</h1>
+				<ul>
+					<li><a href="http://code.google.com/p/geedback/" target="_blank"><span>geedback en Google Code</span></a></li>
 				</ul>
 			</div>
 
