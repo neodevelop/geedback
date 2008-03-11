@@ -58,7 +58,7 @@
 				                            <label for="correo"><g:message code="evaluador.correo" default="Correo" /> <span class="req">*</span> :</label>
 				                        </td>
 				                        <td valign="top" class="value ${hasErrors(bean:evaluador,field:'correo','errors')}">
-				                            <input class="required" type="text"  maxlength="100" id="correo" name="correo"  value="${fieldValue(bean:evaluador,field:'correo')}"/>
+				                            <input class="required validate-email" type="text"  maxlength="100" id="correo" name="correo"  value="${fieldValue(bean:evaluador,field:'correo')}"/>
 											<g:hasErrors bean="${evaluador}" field="correo">
 								            <div class="errors">
 								                <g:renderErrors bean="${evaluador}" as="list" field="correo"/>
