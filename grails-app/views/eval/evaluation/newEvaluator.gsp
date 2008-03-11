@@ -76,6 +76,7 @@
 				            </table>
 				        </div>
 				        <div class="buttons">
+							<span class="button"><g:submitButton name="back" value="${message(code:'default.paginate.prev')}"></g:submitButton></span>
 							<span class="button"><g:submitButton name="next" value="${message(code:'default.paginate.next')}"></g:submitButton></span>
 				        </div>
 				    </g:form>
