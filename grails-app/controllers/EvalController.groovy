@@ -1,51 +1,60 @@
 class EvalController {
 
     def index = {
-		redirect(action:'evaluacion')
+		redirect(action:'evaluation')
 	}
 
-	def evaluacionFlow = {
-		bienvenida {
-			on("siguiente").to "introduceUsuario"
+	def evaluationFlow = {
+		welcome {
+			on("next").to "selectUser"
 		}
-		introduceUsuario{
-			on("siguiente").to "buscaUsuario"
+		selectUser{
+			on("back").to "welcome"
+			on("next").to "searchEvaluator"
 		}
-		buscaUsuario {
+		searchEvaluator {
 			action {
 				def correo = params.correo
 				def evaluador = Evaluador.findByCorreo(correo)
-				def evaluacion = new Evaluacion()
-				flow.evaluacion = evaluacion
 				
 				if(evaluador) {
-					flow.evaluacion.evaluador = evaluador
-					return encontrado()
+					flow.idEvaluador = evaluador.id
+					return found()
 				}
 				else {
-					return noEncontrado()
+					evaluador = new Evaluador()
+					evaluador.correo = correo
+					flow.evaluador = evaluador
+					
+					flash.message = "evaluador.not.found"
+		            flash.args = [params.correo]
+		            flash.defaultMessage = "No se encontro al evaluador con el correo [${params.correo}]. Se procede a crear una nueva cuenta."
+					
+					return notFound()
 				}
 		   }
-		   on("encontrado").to "escogeCuestionario"
-		   on("noEncontrado").to "nuevoEvaluador"
+		   on("found").to "pickEvaluation"
+		   on("notFound").to "newEvaluator"
 		}
-		nuevoEvaluador{
-			on("siguiente") {
+		newEvaluator{
+			on("back").to "selectUser"
+			on("next") {
 				def evaluador = new Evaluador(params)
 				flow.evaluador = evaluador
+				flow.correo = evaluador.correo
 				
 				if(!evaluador || evaluador.hasErrors() || !evaluador.validate()) {
-					
 					return error()
 				} else {
 					evaluador.save()
 				}
-				flow.evaluacion.evaluador = evaluador
+				flow.evaluador = evaluador
 				
-			}.to "escogeCuestionario"
+			}.to "pickEvaluation"
 		}
-		escogeCuestionario {
-			on("siguiente") {
+		pickEvaluation {
+			on("back").to "selectUser"
+			on("next") {
 				def cuestionario = Cuestionario.get(params.cuestionario.id)
 				
 				if(!cuestionario) {
@@ -60,24 +69,29 @@ class EvalController {
 				def respuestas = [:]
 				flow.respuestas = respuestas
 				
-			}.to "buscaPregunta"
+			}.to "searchQuestion"
 		}
-		buscaPregunta {
+		searchQuestion {
 			action {
 				if(!flow.idPreguntaActual) {
-					return finaliza()
+					return finish()
 				}
 				flow.pregunta = Pregunta.get(flow.idPreguntaActual)
 				
 				[opciones:OpcionRespuesta.findAllByPregunta(flow.pregunta)]
-		   }
-		   on("success").to "despliegaPregunta"
-			on("finaliza").to "guarda"
+			}
+			on("success").to "askQuestion"
+			on("finish").to "save"
 		}
-		despliegaPregunta {
-			on("siguiente") {
+		askQuestion {
+			on("back").to "pickEvaluation"
+			on("next") {
 				
-				if (!params.respuesta) return error()
+				if (!params.respuesta) {
+					flash.message = "question.not.found"
+		            flash.defaultMessage = "Debes contestar la pregunta."
+					return error()
+				} 
 				
 				if(!flow.pregunta.abierta) {
 					def opcionRespuesta = OpcionRespuesta.get(params.respuesta)
@@ -93,16 +107,14 @@ class EvalController {
 				} else {
 					flow.idPreguntaActual = null
 				}
-			}.to "buscaPregunta"
-			on("return").to "guarda"
+			}.to "searchQuestion"
+			on("return").to "save"
 		}
-		guarda {
+		save {
 			action {
 				println "Guardando resultados."
 				
-				def q= new StringBuffer()
-				
-				def eva = flow.evaluacion
+				def eva = new Evaluacion(flow.idEvaluacion)
 				eva.cuestionario = flow.cuestionario
 				eva.save(flush:true)
 				println eva
@@ -127,9 +139,6 @@ class EvalController {
 					}
 					resp.add(respuestaEvaluacion)
 					println respuestaEvaluacion
-					//println respuestaEvaluacion
-					//respuestaEvaluacion.save(flush:true)
-					//eva.addToRespuestas(respuestaEvaluacion)
 				}
 				
 				resp.each {
@@ -140,10 +149,9 @@ class EvalController {
 				println eva
 				println eva.respuestas
 				eva.save(flush:true)
-				println q.toString()
 		   }
-		   on("success").to "finaliza"
+		   on("success").to "end"
 		}
-		finaliza()
+		end()
 	}
 }
