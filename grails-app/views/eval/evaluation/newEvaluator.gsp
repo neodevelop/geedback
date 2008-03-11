@@ -10,6 +10,9 @@
 			</div>
 			<div class="content">
 				<h1><span></a><g:message code="evaluacion" default="Evaluaci&oacute;n" /></span></h1>
+				<g:if test="${flash.message}">
+	            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+	            </g:if>
 				<div class="body">
 					<g:form action="evaluation" method="post" >
 				        <div class="dialog">
