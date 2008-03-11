@@ -3,6 +3,12 @@
     <head>
         <meta name="layout" content="main" />
         <title><g:message code="registro.nuevo.bienvenida.titulo" default="Welcome" /></title>
+
+		<g:javascript library="prototype" />
+		<g:javascript library="prototype/effects" />
+		<g:javascript library="validation/validation" />
+		
+		<link rel="stylesheet" href="${createLinkTo(dir:'css/validation',file:'validation.css')}" />
     </head>
     <body>
         <div class="item">
@@ -10,11 +16,11 @@
 			</div>
 			<div class="content">
 				<h1><span></a><g:message code="evaluacion" default="Evaluaci&oacute;n" /></span></h1>
-				<g:if test="${flash.message}">
-	            <div class="message"><g:message code="${flash.message}" args="${flash.args}" default="${flash.defaultMessage}" /></div>
+				<g:if test="${message}">
+	            <div class="message"><g:message code="${message}" args="${args}" default="${defaultMessage}" /></div>
 	            </g:if>
 				<div class="body">
-					<g:form action="evaluation" method="post" >
+					<g:form action="evaluation" method="post" name="formEvaluador">
 				        <div class="dialog">
 							<table>
 				                <tbody>
@@ -83,7 +89,9 @@
 							<span class="button"><g:submitButton name="next" value="${message(code:'default.paginate.next')}"></g:submitButton></span>
 				        </div>
 				    </g:form>
-
+					<script type="text/javascript">
+						var valid = new Validation('formEvaluador', {immediate : true});
+					</script>
 				</div>
 			</div>
 		</div>
