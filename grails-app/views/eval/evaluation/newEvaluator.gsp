@@ -2,7 +2,6 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <title><g:message code="registro.nuevo.bienvenida.titulo" default="Welcome" /></title>
 
 		<g:javascript library="prototype" />
 		<g:javascript library="prototype/effects" />

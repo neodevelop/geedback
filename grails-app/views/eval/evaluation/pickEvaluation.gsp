@@ -2,7 +2,6 @@
 <html>
     <head>
         <meta name="layout" content="main" />
-        <title><g:message code="registro.nuevo.bienvenida.titulo" default="Welcome" /></title>
     </head>
     <body>
 		<div class="item">
@@ -10,6 +9,9 @@
 			</div>
 			<div class="content">
 				<h1><span></a><g:message code="evaluation" default="Evaluaci&oacute;n" /></span></h1>
+				<g:if test="${message}">
+	            <div class="message"><g:message code="${message}" args="${args}" default="${defaultMessage}" /></div>
+	            </g:if>
 				<div class="body">
 					<g:form action="evaluation" method="post" >
 				        <div class="dialog">
