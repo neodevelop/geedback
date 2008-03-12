@@ -1,5 +1,7 @@
 class EvalController {
 
+	def evaluacionService
+	
     def index = {
 		redirect(action:'evaluation')
 	}
@@ -18,7 +20,7 @@ class EvalController {
 				def evaluador = Evaluador.findByCorreo(correo)
 				
 				if(evaluador) {
-					flow.idEvaluador = evaluador.id
+					flow.evaluador = evaluador
 					return found()
 				}
 				else {
@@ -48,7 +50,7 @@ class EvalController {
 				} else {
 					evaluador.save()
 				}
-				flow.evaluador = evaluador
+				//flow.evaluador = evaluador
 				
 			}.to "pickEvaluation"
 		}
@@ -59,16 +61,24 @@ class EvalController {
 				
 				if(!cuestionario) {
 					return error()
-				} 
+				}
 				
-				def preguntaActual = Pregunta.findByCuestionario(cuestionario, [sort:"orden"])
+				def eva = Evaluacion.findByEvaluadorAndCuestionario(flow.evaluador, cuestionario)
 				
-				flow.idPreguntaActual = preguntaActual.id
-				flow.cuestionario = cuestionario
-				
-				def respuestas = [:]
-				flow.respuestas = respuestas
-				
+				if(eva) {
+					flash.message = "evaluacion.duplicated"
+		            flash.args = [flow.evaluador, cuestionario]
+		            flash.defaultMessage = "Ya se encuentra una evaluacion del usuario [${flow.evaluador}] para el curso [${cuestionario}]."
+					return error()
+				} else {
+					def preguntaActual = Pregunta.findByCuestionario(cuestionario, [sort:"orden"])
+
+					flow.idPreguntaActual = preguntaActual.id
+					flow.cuestionario = cuestionario
+
+					def respuestas = [:]
+					flow.respuestas = respuestas
+				}
 			}.to "searchQuestion"
 		}
 		searchQuestion {
@@ -93,11 +103,11 @@ class EvalController {
 					return error()
 				} 
 				
-				if(!flow.pregunta.abierta) {
+				if(flow.pregunta.abierta) {
+					flow.respuestas.put(flow.idPreguntaActual, params.respuesta)
+				} else {
 					def opcionRespuesta = OpcionRespuesta.get(params.respuesta)
 					flow.respuestas.put(flow.idPreguntaActual, opcionRespuesta.id)
-				} else {
-					flow.respuestas.put(flow.idPreguntaActual, params.respuesta)
 				}
 				
 				def pregActual = Pregunta.findByCuestionarioAndIdGreaterThan(flow.cuestionario, flow.idPreguntaActual, [sort:"orden"])
@@ -112,43 +122,7 @@ class EvalController {
 		}
 		save {
 			action {
-				println "Guardando resultados."
-				
-				def eva = new Evaluacion(flow.idEvaluacion)
-				eva.cuestionario = flow.cuestionario
-				eva.save(flush:true)
-				println eva
-				
-				def resp = new ArrayList()
-				flow.respuestas.each { k, v->
-					println "Iterando: " + k
-					def p = Pregunta.get(k)
-					def oR = new OpcionRespuesta()
-					
-					def respuestaEvaluacion = new RespuestaEvaluacion()
-					respuestaEvaluacion.evaluacion = eva
-					respuestaEvaluacion.pregunta = p
-					
-					println respuestaEvaluacion.evaluacion
-					
-					if(p.abierta) {
-						respuestaEvaluacion.respuestaAbierta = v
-					} else {
-						oR = OpcionRespuesta.get(v)
-						respuestaEvaluacion.opcionRespuesta = oR
-					}
-					resp.add(respuestaEvaluacion)
-					println respuestaEvaluacion
-				}
-				
-				resp.each {
-					println "Item: $it"
-					eva.addToRespuestas(it)
-				}
-				
-				println eva
-				println eva.respuestas
-				eva.save(flush:true)
+				evaluacionService.createEvaluation(flow.evaluador, flow.cuestionario, flow.respuestas)
 		   }
 		   on("success").to "end"
 		}
