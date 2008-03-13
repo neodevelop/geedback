@@ -32,7 +32,7 @@
                                     <label for="pregunta"><g:message code="pregunta.pregunta" default="Pregunta" /> <span class="req">*</span> :</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:pregunta,field:'pregunta','errors')}">
-									<textarea class="required" rows='5' cols='40' name='pregunta'></textarea>
+									<textarea class="required" rows='5' cols='40' name='pregunta' value="${fieldValue(bean:pregunta,field:'pregunta')}"></textarea>
 									<g:hasErrors bean="${pregunta}" field="pregunta">
 						            <div class="errors">
 						                <g:renderErrors bean="${pregunta}" as="list" field="pregunta"/>
