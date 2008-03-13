@@ -68,3 +68,6 @@ log4j {
 }
 
 
+
+
+log4j.logger.org.acegisecurity="off,stdout"
