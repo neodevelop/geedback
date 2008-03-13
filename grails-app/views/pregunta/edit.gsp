@@ -34,7 +34,7 @@
                                     <label for="pregunta"><g:message code="pregunta.pregunta" default="Pregunta" /> <span class="req">*</span> :</label>
                                 </td>
                                 <td valign="top" class="value ${hasErrors(bean:pregunta,field:'pregunta','errors')}">
-                                    <input class="required" type="text"  maxlength="50" id="pregunta" name="pregunta"  value="${fieldValue(bean:pregunta,field:'pregunta')}"/>
+									<textarea class="required" rows='5' cols='40' id="pregunta" name="pregunta"  value="${fieldValue(bean:pregunta,field:'pregunta')}"></textarea>
 									<g:hasErrors bean="${pregunta}" field="pregunta">
 						            <div class="errors">
 						                <g:renderErrors bean="${pregunta}" as="list" field="pregunta"/>

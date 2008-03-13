@@ -5,7 +5,7 @@ class OpcionRespuesta implements Serializable {
 	static belongsTo = [pregunta:Pregunta]
 	
 	static constraints = {
-		opcion(nullable:false, blank:false, size:1..50)
+		opcion(nullable:false, blank:false, size:1..1000)
 		orden(nullable:false)
 	}	
 	

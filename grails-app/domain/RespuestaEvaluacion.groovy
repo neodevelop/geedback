@@ -8,6 +8,6 @@ class RespuestaEvaluacion {
 	static constraints = {
 		//pregunta(nullable:false)
 		opcionRespuesta(nullable:true)
-		respuestaAbierta(nullable:true, blank:true, size:1..500)
+		respuestaAbierta(nullable:true, blank:true, size:1..1000)
 	}
 }
