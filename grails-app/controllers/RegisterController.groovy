@@ -158,7 +158,7 @@ class RegisterController {
 
           person.save(flush:true)
           def parMap =['j_username':person.username,'j_password':params.passwd]
-          redirect(controller:'login',action:'../j_acegi_security_check',params:parMap)
+          redirect(controller:'login')
         }else {
           person.passwd = ""
           render(view: "index", model: [person: person])
