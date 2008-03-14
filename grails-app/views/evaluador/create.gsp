@@ -3,7 +3,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-        <meta name="layout" content="main" />
+        <meta name="layout" content="default" />
         <title><g:message code="evaluador.create" default="Create Evaluador" /></title>
 
 		<g:javascript library="prototype" />
