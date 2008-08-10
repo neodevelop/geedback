@@ -1,10 +1,18 @@
 <html>
     <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
         <title><g:layoutTitle default="geedback - " /></title>
         <link rel="stylesheet" href="${createLinkTo(dir:'css',file:'bitter_sweet.css')}" />
         <link rel="shortcut icon" href="${createLinkTo(dir:'images',file:'favicon.ico')}" type="image/x-icon" />
         <g:layoutHead />
-        <g:javascript library="application" />				
+		<script src="http://www.google.com/jsapi"></script>
+		<script>
+		  // Load Prototype
+		  google.load("prototype", "1.6.0.2");
+		</script>
+        <g:javascript library="application" />	
+		<g:javascript library="validation/validation" />
+		<link rel="stylesheet" href="${createLinkTo(dir:'css/validation',file:'validation.css')}" />			
     </head>
     <body>
 		<div class="container">
