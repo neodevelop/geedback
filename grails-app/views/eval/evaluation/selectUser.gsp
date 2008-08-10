@@ -1,13 +1,6 @@
- 
 <html>
     <head>
         <meta name="layout" content="main" />
-
-		<g:javascript library="prototype" />
-		<g:javascript library="prototype/effects" />
-		<g:javascript library="validation/validation" />
-		
-		<link rel="stylesheet" href="${createLinkTo(dir:'css/validation',file:'validation.css')}" />
     </head>
     <body>
 		<div class="item">
