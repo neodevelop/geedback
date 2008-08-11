@@ -39,6 +39,7 @@
 				<h1>Conoce geedback</h1>
 				<ul>
 					<li><a href="http://code.google.com/p/geedback/" target="_blank"><span>geedback en Google Code</span></a></li>
+					<li><script type="text/javascript" src="http://www.ohloh.net/projects/13341/widgets/project_partner_badge"></script></li>
 				</ul>
 			</div>
 
