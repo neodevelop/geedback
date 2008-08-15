@@ -16,7 +16,7 @@
 class EvalController {
 
 	def evaluacionService
-	
+
     def index = {
 		redirect(action:'evaluation')
 	}
@@ -32,21 +32,21 @@ class EvalController {
 		searchEvaluator {
 			action {
 				def correo = params.correo
-				def evaluador = Evaluador.findByCorreo(correo)
-				
+				def evaluador = Person.findByEmail(correo)
+
 				if(evaluador) {
 					flow.evaluador = evaluador
 					return found()
 				}
 				else {
-					evaluador = new Evaluador()
-					evaluador.correo = correo
+					evaluador = new Person()
+					evaluador.email = correo
 					flow.evaluador = evaluador
-					
+
 					flash.message = "evaluador.not.found"
 		            flash.args = [params.correo]
 		            flash.defaultMessage = "No se encontro al evaluador con el correo [${params.correo}]. Se procede a crear una nueva cuenta."
-					
+
 					return notFound()
 				}
 		   }
@@ -56,30 +56,28 @@ class EvalController {
 		newEvaluator{
 			on("back").to "selectUser"
 			on("next") {
-				def evaluador = new Evaluador(params)
+				def evaluador = new Person(params)
 				flow.evaluador = evaluador
-				flow.correo = evaluador.correo
+				flow.correo = evaluador.email
 				
 				if(!evaluador || evaluador.hasErrors() || !evaluador.validate()) {
 					return error()
 				} else {
 					evaluador.save()
 				}
-				//flow.evaluador = evaluador
-				
 			}.to "pickEvaluation"
 		}
 		pickEvaluation {
 			on("back").to "selectUser"
 			on("next") {
 				def cuestionario = Cuestionario.get(params.cuestionario.id)
-				
+
 				if(!cuestionario) {
 					return error()
 				}
-				
+
 				def eva = Evaluacion.findByEvaluadorAndCuestionario(flow.evaluador, cuestionario)
-				
+
 				if(eva) {
 					flash.message = "evaluacion.duplicated"
 		            flash.args = [flow.evaluador, cuestionario]
@@ -111,22 +109,22 @@ class EvalController {
 		askQuestion {
 			on("back").to "pickEvaluation"
 			on("next") {
-				
+
 				if (!params.respuesta) {
 					flash.message = "question.not.found"
-		            flash.defaultMessage = "Debes contestar la pregunta."
+		            flash.defaultMessage = "You must answer the question."
 					return error()
 				} 
-				
+
 				if(flow.pregunta.abierta) {
 					flow.respuestas.put(flow.idPreguntaActual, params.respuesta)
 				} else {
 					def opcionRespuesta = OpcionRespuesta.get(params.respuesta)
 					flow.respuestas.put(flow.idPreguntaActual, opcionRespuesta.id)
 				}
-				
+
 				def pregActual = Pregunta.findByCuestionarioAndIdGreaterThan(flow.cuestionario, flow.idPreguntaActual, [sort:"orden"])
-				
+
 				if(pregActual) {
 					flow.idPreguntaActual = pregActual.id
 				} else {

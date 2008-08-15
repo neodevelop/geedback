@@ -9,10 +9,13 @@
 		<script>
 		  // Load Prototype
 		  google.load("prototype", "1.6.0.2");
+		  google.load("scriptaculous", "1.8.1");
 		</script>
         <g:javascript library="application" />	
 		<g:javascript library="validation/validation" />
 		<link rel="stylesheet" href="${createLinkTo(dir:'css/validation',file:'validation.css')}" />			
+		
+		<modalbox:modalIncludes />
     </head>
     <body>
 		<div class="container">
@@ -35,6 +38,7 @@
 					<li><a href="http://www.synergyj.com/web.html" target="_blank">Desarrollo Web</a></li>
 					<li><a href="http://www.synergyj.com/hibernate.html" target="_blank">Hibernate</a></li>
 					<li><a href="http://www.synergyj.com/spring.html" target="_blank">Spring</a></li>
+					<li><modalbox:createLink url="createPerson.gsp" title="Hello Grails!" width="600" linkname="This is the Link" /></li>
 				</ul>
 				<h1>Conoce geedback</h1>
 				<ul>
