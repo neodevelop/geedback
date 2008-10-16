@@ -1,5 +1,6 @@
 <html>
     <head>
+		<title>Inicio</title>
 		<meta name="layout" content="main" />
     </head>
     <body>
