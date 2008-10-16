@@ -93,10 +93,16 @@ class LoginController {
       if(itr.hasNext()) isAjax=true
     }
 
+	println "Error al hacer login"
+	println msg
+	
     if(isAjax){
+		println "AJAX"
       render("{error:'${msg}'}")
     }else{
+	println "NORMAL"
       flash.message = msg
+	
       redirect(action:auth,params:params)
     }
   }
@@ -117,4 +123,8 @@ class LoginController {
     response.setIntHeader ("Expires", -1); //prevents caching at the proxy server 
     response.addHeader("cache-Control", "private"); //IE5.x only;
   }
+	def loginAjaxiano = {
+		cache(response)
+	}
+
 }

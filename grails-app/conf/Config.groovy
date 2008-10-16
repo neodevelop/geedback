@@ -86,3 +86,6 @@ log4j {
 
 
 log4j.logger.org.acegisecurity="off,stdout"
+
+
+avatarPlugin.defaultGravatarUrl="http://grailscrowd.com/images/default-gravatar-80.png"

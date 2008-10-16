@@ -189,4 +189,9 @@ class RegisterController {
       render(view: "index", model: [person: person])
     }
    } //save
+
+	def registerForm = { }
+	def saveRegister = {
+		
+	}
 }

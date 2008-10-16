@@ -75,7 +75,7 @@ acegi {
   mailFrom = "user@localhost"
   
   /** AJAX request header */
-  ajaxHeader="X-Requested-With"
+  ajaxHeader="XMLHttpRequest"
   
   /** default user's role for user registration */
   defaultRole="ROLE_USER"
